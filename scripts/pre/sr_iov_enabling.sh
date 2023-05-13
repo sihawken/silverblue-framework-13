@@ -8,8 +8,8 @@ set -oue pipefail
 # FOLLOWING INSTRUCTIONS FROM:
 # https://www.michaelstinkerings.org/gpu-virtualization-with-intel-12th-gen-igpu-uhd-730/
 
-# Your code goes here.
-rpm-ostree install dkms sysfsutils kernel-headers -y
+# Install prerequisites
+rpm-ostree install dkms sysfsutils kernel-headers-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
 
 #Part 3.1 - Installing the dkms module
