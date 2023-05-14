@@ -25,6 +25,9 @@ cd /usr/src/i915-sriov-dkms-6.1/
 xz i915.ko
 mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/updates/i915.ko.xz
 # make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
+
+echo "override i915 $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') updates > /etc/depmod.d/i915.conf
+
 depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
 # mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
