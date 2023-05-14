@@ -9,19 +9,7 @@ set -oue pipefail
 # https://www.michaelstinkerings.org/gpu-virtualization-with-intel-12th-gen-igpu-uhd-730/
 
 # Install prerequisites
-rpm-ostree install kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
-
-# Test workaround
-rpm-ostree install git make binutils --apply-live
-
-alias ld /usr/bin/ld
-
-#Part 3.1 - Compiling the module
-cd /usr/src/
-git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1
-cd i915-sriov-dkms-6.1
-make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) i915.ko
 
 # May not need to be deleted - TO REMOVE
 # rm -rf /lib/modules/6.2.14-300.fc38.x86_64/kernel/drivers/gpu/drm/i915/i915.ko.xz
