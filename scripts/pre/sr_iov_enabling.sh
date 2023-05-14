@@ -9,31 +9,48 @@ set -oue pipefail
 # https://www.michaelstinkerings.org/gpu-virtualization-with-intel-12th-gen-igpu-uhd-730/
 # https://utcc.utoronto.ca/~cks/space/blog/linux/HandBuildKernelModule
 
-# Install prerequisites
+# Disabled all of these commands because I cannot get it to work with
 
-rpm-ostree install git make binutils kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
-ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
-
-cd /usr/src/ && \
-git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
+rpm-ostree install dkms git make binutils kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+cd /usr/src/
+git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1
 cd i915-sriov-dkms-6.1
 
-# rm -rf /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
+sed -i 's/PACKAGE_NAME="@_PKGBASE@"/PACKAGE_NAME="i915-sriov-dkms"/g' dkms.conf
+sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="6.1"/g' dkms.conf
+sed -i 's/kernel_source_dir/KERNEL_SOURCE_DIR_BUILD/g' dkms.conf
 
-make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
-cd /usr/src/i915-sriov-dkms-6.1/
-xz i915.ko
-mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/updates/i915.ko.xz
-# make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
+echo KERNEL_SOURCE_DIR_BUILD='"/lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build"' | cat - dkms.conf > temp && mv temp dkms.conf
 
-echo "override i915 * updates > /etc/depmod.d/i915.conf"
+# dkms install -m i915-sriov-dkms -v 6.1
 
-depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+## DIFFERENT ATTEMPT
 
-# mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
+# # Install prerequisites
 
-# rm -rf /usr/src/i915-sriov-dkms-6.1
+# rpm-ostree install git make binutils kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+# ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
 
-# sysfsutils stuff
-rpm-ostree install sysfsutils
-echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
+# cd /usr/src/ && \
+# git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
+# cd i915-sriov-dkms-6.1
+
+# # rm -rf /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
+
+# make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
+# cd /usr/src/i915-sriov-dkms-6.1/
+# xz i915.ko
+# mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/updates/i915.ko.xz
+# # make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
+
+# echo "override i915 * updates > /etc/depmod.d/i915.conf"
+
+# depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+
+# # mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
+
+# # rm -rf /usr/src/i915-sriov-dkms-6.1
+
+# # sysfsutils stuff
+# rpm-ostree install sysfsutils
+# echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
