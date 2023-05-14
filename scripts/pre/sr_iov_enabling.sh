@@ -18,12 +18,12 @@ cd /usr/src/ && \
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
 cd i915-sriov-dkms-6.1
 
-rm -rf /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
+# rm -rf /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
 
 make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
 cd /usr/src/i915-sriov-dkms-6.1/
 xz i915.ko
-mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
+mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/updates/i915.ko.xz
 # make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
 depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
