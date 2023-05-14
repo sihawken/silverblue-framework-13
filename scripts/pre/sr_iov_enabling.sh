@@ -25,7 +25,7 @@ sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="6.1"/g' dkms.conf
 
 ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
 
-kms add --rpm_safe_upgrade -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
+dkms add --rpm_safe_upgrade -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
 dkms build -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
 dkms install -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1 --force
 
