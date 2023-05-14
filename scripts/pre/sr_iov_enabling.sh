@@ -16,4 +16,4 @@ echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
 cd /usr/src/
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1
 cd i915-sriov-dkms-6.1
-make -C /lib/modules/$(uname -r)/build M=$(pwd)
+make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
