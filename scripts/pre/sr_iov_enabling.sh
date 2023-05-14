@@ -18,8 +18,8 @@ git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
 cd i915-sriov-dkms-6.1 && \
 make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) i915.ko
 
-# May not need to be deleted - TO REMOVE
-# rm -rf /lib/modules/6.2.14-300.fc38.x86_64/kernel/drivers/gpu/drm/i915/i915.ko.xz
+# May not need to be deleted
+rm -rf /lib/modules/6.2.14-300.fc38.x86_64/kernel/drivers/gpu/drm/i915/i915.ko.xz
 
 cd /usr/src/i915-sriov-dkms-6.1/
 xz i915.ko
