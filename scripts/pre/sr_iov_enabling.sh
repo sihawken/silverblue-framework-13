@@ -26,7 +26,7 @@ xz i915.ko
 mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/updates/i915.ko.xz
 # make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
 
-echo "override i915 $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') updates > /etc/depmod.d/i915.conf
+echo "override i915 * updates > /etc/depmod.d/i915.conf
 
 depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
