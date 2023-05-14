@@ -22,14 +22,12 @@ rm -rf /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH
 
 make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
 make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
-depmod /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -a
+depmod -v /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -a
 
 # cd /usr/src/i915-sriov-dkms-6.1/
 # xz i915.ko
 
 # mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/kernel/drivers/gpu/drm/i915/i915.ko.xz
-
-# depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
 rm -rf /usr/src/i915-sriov-dkms-6.1
 
