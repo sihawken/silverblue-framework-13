@@ -11,14 +11,13 @@ set -oue pipefail
 
 # Disabled all of these commands because I cannot get it to work with
 
-rpm-ostree install dkms git make binutils kernel-headers kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+rpm-ostree install dkms git make binutils kernel-headers-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 cd /usr/src/
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1
 cd i915-sriov-dkms-6.1
 
 sed -i 's/PACKAGE_NAME="@_PKGBASE@"/PACKAGE_NAME="i915-sriov-dkms"/g' dkms.conf
 sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="6.1"/g' dkms.conf
-sed '5d' dkms.conf
 #sed -i 's/kernel_source_dir/KERNEL_SOURCE_DIR_BUILD/g' dkms.conf
 
 #echo KERNEL_SOURCE_DIR_BUILD='"/lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build"' | cat - dkms.conf > temp && mv temp dkms.conf
