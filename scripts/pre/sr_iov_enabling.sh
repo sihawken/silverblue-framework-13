@@ -22,7 +22,7 @@ sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="6.1"/g' dkms.conf
 
 #echo KERNEL_SOURCE_DIR_BUILD='"/lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build"' | cat - dkms.conf > temp && mv temp dkms.conf
 
-dkms add -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
+dkms add --rpm_safe_upgrade -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
 dkms build -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
 dkms install -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1 --force
 
