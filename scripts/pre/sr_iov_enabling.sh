@@ -21,6 +21,7 @@ cd i915-sriov-dkms-6.1
 # May not need to be deleted
 rm -rf /lib/modules/6.2.14-300.fc38.x86_64/kernel/drivers/gpu/drm/i915/i915.ko.xz
 
+make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
 make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
 
 rm -rf /usr/src/i915-sriov-dkms-6.1
