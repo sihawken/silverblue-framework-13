@@ -1,15 +1,7 @@
 ARG FEDORA_MAJOR_VERSION=38
 ARG BASE_IMAGE_URL=ghcr.io/ublue-os/silverblue-main
 
-FROM ${BASE_IMAGE_URL}:${FEDORA_MAJOR_VERSION} as module_builder
-
-RUN cd /usr/src/ && \
-git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
-cd i915-sriov-dkms-6.1 && \
-make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
-
-
-FROM ${BASE_IMAGE_URL}:${FEDORA_MAJOR_VERSION} as image
+FROM ${BASE_IMAGE_URL}:${FEDORA_MAJOR_VERSION}
 ARG RECIPE
 
 # copy over configuration files
