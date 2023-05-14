@@ -2,7 +2,7 @@ ARG FEDORA_MAJOR_VERSION=38
 ARG BASE_IMAGE_URL=ghcr.io/ublue-os/silverblue-main
 
 FROM ${BASE_IMAGE_URL}:${FEDORA_MAJOR_VERSION} as module_builder
-RUN rpm-ostree install git make binutils kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+RUN rpm-ostree install git make binutils binutils-devel kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
 RUN cd /usr/src/ && \
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
