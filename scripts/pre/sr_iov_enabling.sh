@@ -12,6 +12,8 @@ set -oue pipefail
 rpm-ostree install git make binutils kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
 
+alias ld /usr/bin/ld
+
 #Part 3.1 - Compiling the module
 cd /usr/src/
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1
@@ -24,3 +26,6 @@ make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARC
 xz i915.ko
 mv i915.ko /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/extra/i915.ko
 depmod $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+
+rpm-ostree remove make binutils kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+rm -rf /usr/src/i915-sriov-dkms-6.1
