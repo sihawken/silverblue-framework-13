@@ -9,13 +9,11 @@ set -oue pipefail
 # https://www.michaelstinkerings.org/gpu-virtualization-with-intel-12th-gen-igpu-uhd-730/
 
 # Install prerequisites
-rpm-ostree install sysfsutils git akmods kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+rpm-ostree install git make kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
 
-#Part 3.1 - Installing the dkms module
+#Part 3.1 - Compiling the module
 cd /usr/src/
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1
-rm -rf /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/source/drivers/gpu/drm/i915/
-mv i915-sriov-dkms-6.1/drivers/gpu/drm/i915 /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/source/drivers/gpu/drm/i915
-ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
-akmods --force --kernels "$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+cd i915-sriov-dkms-6.1
+make -C /lib/modules/$(uname -r)/build M=$(pwd)
