@@ -7,7 +7,7 @@ RUN rpm-ostree install git make binutils kernel-devel-$(rpm -qa kernel --queryfo
 RUN cd /usr/src/ && \
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
 cd i915-sriov-dkms-6.1 && \
-make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) i915.ko
+make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd)
 
 
 FROM ${BASE_IMAGE_URL}:${FEDORA_MAJOR_VERSION} as image
