@@ -31,4 +31,6 @@ depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
 # rm -rf /usr/src/i915-sriov-dkms-6.1
 
+# sysfsutils stuff
+rpm-ostree install sysfsutils
 echo "devices/pci0000:00/0000:00:02.0/sriov_numvfs = 7" > /etc/sysfs.conf
