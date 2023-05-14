@@ -7,6 +7,7 @@ set -oue pipefail
 
 # FOLLOWING INSTRUCTIONS FROM:
 # https://www.michaelstinkerings.org/gpu-virtualization-with-intel-12th-gen-igpu-uhd-730/
+# https://utcc.utoronto.ca/~cks/space/blog/linux/HandBuildKernelModule
 
 # Install prerequisites
 
@@ -15,16 +16,12 @@ ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bi
 
 cd /usr/src/ && \
 git clone https://github.com/strongtz/i915-sriov-dkms i915-sriov-dkms-6.1 && \
-cd i915-sriov-dkms-6.1 && \
-make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) i915.ko
+cd i915-sriov-dkms-6.1
 
 # May not need to be deleted
 rm -rf /lib/modules/6.2.14-300.fc38.x86_64/kernel/drivers/gpu/drm/i915/i915.ko.xz
 
-cd /usr/src/i915-sriov-dkms-6.1/
-xz i915.ko
-mv i915.ko.xz /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/extra/i915.ko.xz
-depmod -v $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+make -C /lib/modules/$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')/build M=$(pwd) modules_install
 
 rm -rf /usr/src/i915-sriov-dkms-6.1
 
