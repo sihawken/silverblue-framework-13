@@ -22,7 +22,7 @@ chmod +x ./build.sh
 rpm-ostree install dkms git make binutils kernel-headers kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
 
 ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
-rpm-ostree install RPMS/i915-sriov-dkms-6.1.11-1.x86_64.rpm
+rpm-ostree install RPMS/x86_64/i915-sriov-dkms-6.1.11-1.x86_64.rpm
 
 # dkms add --rpm_safe_upgrade -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
 # dkms build -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
