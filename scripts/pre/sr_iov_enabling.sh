@@ -14,8 +14,8 @@ set -oue pipefail
 
 # Build the RPM
 rpm-ostree install rpmdevtools
-git clone https://github.com/sihawken/i915-sriov-dkms-rpm.git
-cd i915-sriov-dkms-rpm
+git clone https://github.com/sihawken/i915-sriov-dkms-rpm.git /tmp/i915-sriov-dkms-rpm
+cd /tmp/i915-sriov-dkms-rpm
 chmod +x ./build.sh
 ./build.sh
 
