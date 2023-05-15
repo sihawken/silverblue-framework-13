@@ -12,17 +12,22 @@ set -oue pipefail
 
 # Disabled all of these commands because I cannot get it to work with
 
-# Build the RPM
-rpm-ostree install rpmdevtools
-git clone https://github.com/sihawken/i915-sriov-dkms-rpm.git /tmp/i915-sriov-dkms-rpm
-cd /tmp/i915-sriov-dkms-rpm
-chmod +x ./build.sh
-./build.sh
+# -- BEST ATTEMPT - NOT WORKING ----------------------------------------------------------------------------------------
 
-rpm-ostree install dkms git make binutils kernel-headers kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+# # Build the RPM
+# rpm-ostree install rpmdevtools
+# git clone https://github.com/sihawken/i915-sriov-dkms-rpm.git /tmp/i915-sriov-dkms-rpm
+# cd /tmp/i915-sriov-dkms-rpm
+# chmod +x ./build.sh
+# ./build.sh
 
-ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
-rpm-ostree install RPMS/x86_64/i915-sriov-dkms-6.1.11-1.x86_64.rpm
+# rpm-ostree install dkms git make binutils kernel-headers kernel-devel-$(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')
+
+# ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
+# rpm-ostree install RPMS/x86_64/i915-sriov-dkms-6.1.11-1.x86_64.rpm
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 # dkms add --rpm_safe_upgrade -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
 # dkms build -k $(rpm -qa kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}') -m i915-sriov-dkms -v 6.1
